@@ -53,6 +53,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.itsc.tuwoda.R
 
@@ -132,7 +133,7 @@ fun MyBottomSheetScaffold(
                                 shape = RoundedCornerShape(percent = 10)
                             )
                             Icon(
-                                imageVector = Icons.Outlined.Search,
+                                painter = painterResource(id = R.drawable.more_office_ic),
                                 contentDescription = "map",
                                 tint = Color.Black,
                                 modifier = Modifier
@@ -173,7 +174,7 @@ fun MyBottomSheetScaffold(
                                         Blue
                                     else
                                         Color.White,
-                                    modifier = Modifier.padding(2.dp)
+                                    overflow = TextOverflow.Visible
                                 )
                             }
                             OutlinedButton(
@@ -194,11 +195,11 @@ fun MyBottomSheetScaffold(
                                         Color.White
                                     else
                                         Blue,
-                                    modifier = Modifier.padding(2.dp)
+                                    overflow = TextOverflow.Visible
                                 )
                             }
                             Icon(
-                                imageVector = Icons.AutoMirrored.TwoTone.List,
+                                painter = painterResource(id = R.drawable.filter_by_near_empty_bank),
                                 contentDescription = "map",
                                 tint = Color.Black,
                                 modifier = Modifier

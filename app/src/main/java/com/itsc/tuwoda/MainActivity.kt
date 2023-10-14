@@ -150,11 +150,6 @@ class MainActivity : ComponentActivity() {
         //endregion
         setContent {
             VTBTheme {
-                WindowInsetsControllerCompat(window, window.decorView).apply {
-                    hide(WindowInsetsCompat.Type.navigationBars())
-                    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                }
-
                 val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
                 context = LocalContext.current
                 mapViewModel = viewModel<MapViewModel>(
@@ -182,23 +177,11 @@ class MainActivity : ComponentActivity() {
                 )
 
                 Scaffold(
-                    containerColor = Color.Green,
-                    floatingActionButton = {
-                        if (model.stateMap) {
-                            Column(
-                                horizontalAlignment = Alignment.End
-                            ) {
-                                Box(
-                                    contentAlignment = Alignment.TopEnd
-                                ) {
-
-                                }
-
-                            }
-                        }
-                    },
-                    floatingActionButtonPosition = FabPosition.End,
                     content = {
+                        WindowInsetsControllerCompat(window, window.decorView).apply {
+                            hide(WindowInsetsCompat.Type.navigationBars())
+                            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                        }
                         MyBottomSheetScaffold(
                             paddingValues = it,
                             scaffoldState = bottomSheetScaffoldState,
