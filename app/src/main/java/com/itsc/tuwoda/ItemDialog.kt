@@ -41,7 +41,6 @@ fun ItemDialog(
                     background = R.drawable.ellipsefull,
                     icon = R.drawable.geoicon,
                     size = 50.dp,
-                    scaleX = (-5).dp,
                     colorBackground = R.color.blue_main_alfa
                 )
             },

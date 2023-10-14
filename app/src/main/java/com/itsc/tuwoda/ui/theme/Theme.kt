@@ -20,13 +20,16 @@ import androidx.core.view.WindowInsetsControllerCompat
 
 private val DarkColorScheme = darkColorScheme(
     primary = Black,
-    secondary = BlackLight,
-
+    secondary = Color.White,
+    inversePrimary = Color.White,
+    inverseOnSurface = DarkWhite
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Color.White,
-    secondary = DarkWhite,
+    secondary = Black,
+    inversePrimary = Black,
+    inverseOnSurface = Color.Gray
 
 )
 
@@ -49,21 +52,16 @@ fun VTBTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-
             window.navigationBarColor = Color.Transparent.toArgb()
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            window.statusBarColor = Color.Transparent.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
             WindowCompat.setDecorFitsSystemWindows(window, false)
-            WindowInsetsControllerCompat(window, window.decorView).apply {
-                hide(WindowInsetsCompat.Type.navigationBars())
-                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
         }
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
         typography = Typography,
+        colorScheme = colorScheme,
         content = content
     )
 }

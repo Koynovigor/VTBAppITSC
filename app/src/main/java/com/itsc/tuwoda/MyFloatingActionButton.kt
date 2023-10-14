@@ -23,12 +23,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun MyFloatingActionButton(
+    modifier: Modifier = Modifier,
     background: Int,
     icon: Int,
-    padding: Dp = 0.dp,
     size: Dp = 55.dp,
-    scaleX: Dp = 0.dp,
-    scaleY: Dp = 0.dp,
     onState: (Boolean) -> Unit = {},
     state: Boolean = false,
     colorBackground: Int = R.color.blue_main,
@@ -38,16 +36,7 @@ fun MyFloatingActionButton(
         onClick = {
             onState(!state)
         },
-        modifier = Modifier
-            .offset(x = scaleX, y = scaleY)
-            .padding(padding)
-            .background(Color.Transparent)
-            .size(size)
-            /*.paint(
-                painter = painterResource(id = background),
-                contentScale = ContentScale.Crop,
-                colorFilter = ColorFilter.tint(colorResource(id = colorBackground)),
-            ),*/,
+        modifier = modifier.size(size),
         containerColor = Color.Transparent,
         contentColor = Color.Transparent,
         elevation = FloatingActionButtonDefaults.elevation(0.dp),
@@ -63,7 +52,6 @@ fun MyFloatingActionButton(
             contentDescription = "moreVert",
             tint = tint,
             modifier = Modifier
-                .padding(padding)
                 .size(size * 0.6f)
                 .background(Color.Transparent)
         )
