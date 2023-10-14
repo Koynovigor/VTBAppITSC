@@ -2,9 +2,11 @@ package com.itsc.tuwoda.ui.theme
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,21 +42,20 @@ import com.itsc.tuwoda.R
 fun MyBottomSheetScaffold(
     scaffoldState: BottomSheetScaffoldState,
     onState: (String) -> Unit,
-    state: String,
-    title: String
+    state: String
     ) {
     BottomSheetScaffold(
         backgroundColor = Color.Transparent,
         contentColor = Color.Transparent,
         scaffoldState = scaffoldState,
-        sheetPeekHeight = 265.dp,
+        sheetPeekHeight = 45.dp,
+        sheetBackgroundColor = Black,
         sheetContent = {
             Scaffold(
-                modifier = Modifier.fillMaxHeight(0.9f),
                 topBar = {
                     CenterAlignedTopAppBar(
                         colors = TopAppBarDefaults.largeTopAppBarColors(
-                            containerColor = colorResource(id = R.color.blue_main)
+                            containerColor = Color.Transparent
                         ),
                         title = {
                             Column(
@@ -67,17 +68,12 @@ fun MyBottomSheetScaffold(
                                     painter = painterResource(id = R.drawable.divider),
                                     contentDescription = "divider",
                                     modifier = Modifier
-                                        .width(45.dp),
+                                        .width(70.dp)
+                                        .offset(y = (-15).dp),
                                     tint = Color.White,
                                 )
-                                Text(
-                                    text = title,
-                                    color = Color.White,
-                                    modifier = Modifier.padding(top = 5.dp),
-
-                                )
                             }
-                        }
+                        },
                     )
                 },
             ) {
@@ -151,7 +147,7 @@ fun MyBottomSheetScaffold(
 
 
         },
-        sheetShape = RoundedCornerShape(45.dp),
+        sheetShape = RoundedCornerShape(15.dp),
         content = {}
     )
 }
