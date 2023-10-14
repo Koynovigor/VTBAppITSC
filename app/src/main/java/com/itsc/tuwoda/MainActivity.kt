@@ -10,30 +10,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.example.test.ui.MapViewModel
 import com.itsc.tuwoda.ui.theme.MyBottomSheetScaffold
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.location.FilteringMode
@@ -42,7 +27,6 @@ import com.yandex.mapkit.location.LocationListener
 import com.yandex.mapkit.location.LocationManager
 import com.yandex.mapkit.location.LocationStatus
 import android.Manifest
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
@@ -51,6 +35,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.test.ui.MapViewModel
 import com.itsc.tuwoda.ui.theme.VTBTheme
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.geometry.Point
@@ -65,6 +50,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var context: Context
     private lateinit var locationManager: LocationManager
     private lateinit var pLauncher: ActivityResultLauncher<String>
+    private var currentBank:Int? = null
 
     //region Permission func
     private fun registerPermissionListener(){
@@ -103,6 +89,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,10 +126,11 @@ class MainActivity : ComponentActivity() {
                     mapViewModel?.setMyLocation(
                         p0.position
                     )
+                    mapViewModel?.initRoads(p0.position)
                 }
 
                 override fun onLocationStatusUpdated(p0: LocationStatus) {
-                    Toast.makeText(context,"123", Toast.LENGTH_LONG).show()
+                    //Toast.makeText(context,"123", Toast.LENGTH_LONG).show()
                 }
 
             }
@@ -176,6 +164,19 @@ class MainActivity : ComponentActivity() {
                     }
                 )
 
+                mapViewModel?.initBankPlacemarks(
+                    id = listOf(1,2,3,4,5),
+                    l = listOf(
+                        Pair(56.454424, 84.935289),
+                        Pair(56.537350, 84.953260),
+                        Pair(56.503949, 85.021851),
+                        Pair(56.474359, 85.002254),
+                        Pair(56.481329, 84.967838)
+                    ),
+                ){ id->
+                    currentBank = id
+                }
+
                 Scaffold(
                     content = {
                         WindowInsetsControllerCompat(window, window.decorView).apply {
@@ -199,17 +200,19 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier
                                         .offset(y = (-35).dp),
                                     onState = {
-                                        val intent =
-                                            packageManager.getLaunchIntentForPackage("ru.yandex.taxi")
-                                        startActivity(intent)
+                                        doItAndCheckPermissions {
+                                            mapViewModel?.goToMyLocation()
+                                        }
                                     }
                                 )
-                            }
+                            },
+                            model = model
                         )
                     }
                 )
             }
         }
+        registerPermissionListener()
     }
     override fun onStop() {
         mapViewModel?.mapView?.onStop()

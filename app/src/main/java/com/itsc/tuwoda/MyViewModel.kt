@@ -1,5 +1,6 @@
 package com.itsc.tuwoda
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,6 +23,14 @@ class MyViewModel:ViewModel() {
     var stateTextTitleRoutes1 by mutableStateOf("56.582062, 84.902435")
 
     var stateTextTitleMe by mutableStateOf("")
+
+    val stateButton = listOf<MutableState<Boolean>>(
+        mutableStateOf(false),
+        mutableStateOf(false),
+        mutableStateOf(false),
+        mutableStateOf(false),
+        mutableStateOf(false),
+    )
 
 
     fun updateStateMap() {

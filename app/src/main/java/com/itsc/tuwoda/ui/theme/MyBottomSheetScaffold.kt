@@ -84,6 +84,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.itsc.tuwoda.MyViewModel
 import com.itsc.tuwoda.R
 import com.itsc.tuwoda.offices
 import java.nio.file.WatchEvent
@@ -97,6 +98,7 @@ fun MyBottomSheetScaffold(
     state: String,
     content: @Composable (PaddingValues) -> Unit = {},
     floatingActionButton: @Composable() (() -> Unit)? = {},
+    model: MyViewModel
     ) {
 
     var state by remember {
@@ -219,20 +221,27 @@ fun MyBottomSheetScaffold(
                             "Рядом с метро"
                         )
 
+
                         if (stateSerch){
                             LazyVerticalGrid(
                                 modifier = Modifier.fillMaxWidth(),
                                 columns = GridCells.Adaptive(130.dp),
                                 content = {
-                                    itemsIndexed(rull){ _, item ->
+                                    itemsIndexed(rull){ ind, item ->
                                         OutlinedButton(
-                                            onClick = { },
+                                            onClick = {
+                                                model.stateButton[ind].value = !model.stateButton[ind].value
+                                                      },
                                             modifier = Modifier
                                                 .size(width = 80.dp, height = 57.dp)
                                                 .padding(2.dp),
                                             colors = ButtonDefaults.buttonColors(
-                                                containerColor = Color.White,
-                                                contentColor = Blue,
+                                                containerColor =
+                                                if (model.stateButton[ind].value) Blue
+                                                        else Color.White,
+                                                contentColor =
+                                                if (model.stateButton[ind].value) Color.White
+                                                else Blue,
                                             ),
                                             shape = RoundedCornerShape(20.dp),
                                         ) {
