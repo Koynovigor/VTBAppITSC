@@ -3,6 +3,7 @@ package com.itsc.tuwoda.ui.theme
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.IndicationInstance
@@ -12,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -26,7 +28,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material.BottomSheetScaffold
@@ -38,9 +48,11 @@ import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.automirrored.twotone.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -50,6 +62,7 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
@@ -59,6 +72,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -67,10 +81,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.itsc.tuwoda.R
 import com.itsc.tuwoda.offices
+import java.nio.file.WatchEvent
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -85,6 +101,9 @@ fun MyBottomSheetScaffold(
 
     var state by remember {
         mutableStateOf(true)
+    }
+    var stateSerch by remember {
+        mutableStateOf(false)
     }
 
     BottomSheetScaffold(
@@ -147,7 +166,7 @@ fun MyBottomSheetScaffold(
                                         )
                                     },
                                 modifier = Modifier
-                                    .weight(5f)
+                                    .weight(4f)
                                     .height(50.dp)
                                     .padding(end = 5.dp)
                                     .clip(RoundedCornerShape(10.dp)),
@@ -158,6 +177,23 @@ fun MyBottomSheetScaffold(
                                     unfocusedIndicatorColor = Color.Transparent,
                                 ),
                                 shape = RoundedCornerShape(percent = 10)
+                            )
+                            IconButton(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(end = 5.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(Color(0xFFF1F2F4)),
+                                onClick = {
+                                    stateSerch = !stateSerch
+                                },
+                                content = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.MoreVert,
+                                        contentDescription = "morevert",
+                                        tint = Color.Black,
+                                    )
+                                }
                             )
                             IconButton(
                                 modifier = Modifier
@@ -173,8 +209,46 @@ fun MyBottomSheetScaffold(
                                     )
                                 }
                             )
-
                         }
+
+                        val rull = listOf<String>(
+                            "Работает сейчас",
+                            "Минимальная загруженность",
+                            "Ближе всего",
+                            "Наличие пандуса",
+                            "Рядом с метро"
+                        )
+
+                        if (stateSerch){
+                            LazyVerticalGrid(
+                                modifier = Modifier.fillMaxWidth(),
+                                columns = GridCells.Adaptive(130.dp),
+                                content = {
+                                    itemsIndexed(rull){ _, item ->
+                                        OutlinedButton(
+                                            onClick = { },
+                                            modifier = Modifier
+                                                .size(width = 80.dp, height = 57.dp)
+                                                .padding(2.dp),
+                                            colors = ButtonDefaults.buttonColors(
+                                                containerColor = Color.White,
+                                                contentColor = Blue,
+                                            ),
+                                            shape = RoundedCornerShape(20.dp),
+                                        ) {
+                                            Text(
+                                                text = item,
+                                                modifier = Modifier
+                                                    .fillMaxWidth(),
+                                                textAlign = TextAlign.Center
+                                            )
+                                        }
+                                    }
+                                }
+                            )
+                        }
+
+
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -230,7 +304,7 @@ fun MyBottomSheetScaffold(
                                     overflow = TextOverflow.Visible
                                 )
                             }
-                            IconButton(
+                            /*IconButton(
                                 modifier = Modifier
                                     .weight(1f)
                                     .size(50.dp)
@@ -244,7 +318,7 @@ fun MyBottomSheetScaffold(
                                         tint = Color.White,
                                     )
                                 }
-                            )
+                            )*/
                         }
                         Divider(
                             thickness = 1.dp,
