@@ -1,5 +1,6 @@
 package com.itsc.tuwoda.ui.theme
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,7 +50,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BrushPainter
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -78,9 +85,15 @@ fun MyBottomSheetScaffold(
         contentColor = Color.Transparent,
         scaffoldState = scaffoldState,
         sheetPeekHeight = 110.dp,
-        sheetBackgroundColor = Black,
+        sheetBackgroundColor = Color.Transparent,
         sheetContent = {
             Scaffold(
+                modifier = Modifier
+                    .paint(
+                        painterResource(id = R.drawable.back),
+                        contentScale = ContentScale.Crop
+                    ),
+                containerColor = Color.Transparent,
                 topBar = {
                     CenterAlignedTopAppBar(
                         modifier = Modifier
@@ -194,6 +207,7 @@ fun MyBottomSheetScaffold(
                                         OutlinedButton(
                                             onClick = {
                                                 model.stateButton[ind].value = !model.stateButton[ind].value
+
                                                       },
                                             modifier = Modifier
                                                 .size(width = 80.dp, height = 57.dp)
@@ -289,70 +303,70 @@ fun MyBottomSheetScaffold(
                             )*/
                         }
 
-                            LazyColumn(
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                        ) {
+                            itemsIndexed(
+                                if (model.stateAtmOrOffice) allAtms
+                                else allOffices
+                            ) { _, item ->
+                            Divider(
+                                thickness = 1.dp,
+                                color = Color.LightGray,
                                 modifier = Modifier
-                                    .fillMaxSize()
-                            ) {
-                                itemsIndexed(
-                                    if (model.stateAtmOrOffice) allAtms
-                                    else allOffices
-                                ) { _, item ->
-                                Divider(
-                                    thickness = 1.dp,
-                                    color = Color.LightGray,
-                                    modifier = Modifier
-                                        .padding(10.dp, 5.dp)
-                                )
-                                TextButton(
-                                    onClick = {
-                                        model.curOffice = item
-                                        navController.navigate("more")
-                                              },
-                                    modifier = Modifier
-                                        .padding(
-                                            horizontal = 7.dp
-                                        )
-                                        .fillMaxWidth(),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = Color.Transparent,
-                                        contentColor = Color.Black,
-                                        disabledContainerColor = Color.Transparent,
-                                        disabledContentColor = Color.Black
+                                    .padding(10.dp, 5.dp)
+                            )
+                            TextButton(
+                                onClick = {
+                                    model.curOffice = item
+                                    navController.navigate("more")
+                                          },
+                                modifier = Modifier
+                                    .padding(
+                                        horizontal = 7.dp
                                     )
+                                    .fillMaxWidth(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = BlueLightAlfa90,
+                                    contentColor = Color.Black,
+                                    disabledContainerColor = BlueLightAlfa90,
+                                    disabledContentColor = Color.Black
+                                )
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxSize(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        Image(
-                                            painter = painterResource( id =
-                                            if (model.stateAtmOrOffice) R.drawable.icatm
-                                            else R.drawable.icoffices
-                                            ),
-                                            contentDescription = "icoffices",
-                                            modifier = Modifier
-                                                .weight(2f)
-                                                .padding(end = 10.dp)
-                                                .clip(RoundedCornerShape(45.dp))
-                                        )
-                                        Text(
-                                            text = item.address,
-                                            modifier = Modifier
-                                                .weight(9f)
-                                        )
-                                        Text(
-                                            text = "${item.distance} м",
-                                            modifier = Modifier
-                                                .weight(3f)
-                                                .padding(start = 10.dp)
-                                        )
+                                    Image(
+                                        painter = painterResource( id =
+                                        if (model.stateAtmOrOffice) R.drawable.icatm
+                                        else R.drawable.icoffices
+                                        ),
+                                        contentDescription = "icoffices",
+                                        modifier = Modifier
+                                            .weight(2f)
+                                            .padding(end = 10.dp)
+                                            .clip(RoundedCornerShape(45.dp))
+                                    )
+                                    Text(
+                                        text = item.address,
+                                        modifier = Modifier
+                                            .weight(9f)
+                                    )
+                                    Text(
+                                        text = "${item.distance} м",
+                                        modifier = Modifier
+                                            .weight(3f)
+                                            .padding(start = 10.dp)
+                                    )
 
-                                    }
                                 }
-
                             }
+
                         }
+                    }
 
                     }
                 }
@@ -367,4 +381,5 @@ fun MyBottomSheetScaffold(
 
         content = content
     )
+
 }

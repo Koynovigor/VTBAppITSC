@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +42,7 @@ fun ItemDialog(
                     background = R.drawable.ellipsefull,
                     icon = R.drawable.geoicon,
                     size = 50.dp,
-                    colorBackground = R.color.blue_main_alfa
+
                 )
             },
             shape = RoundedCornerShape(100.dp),

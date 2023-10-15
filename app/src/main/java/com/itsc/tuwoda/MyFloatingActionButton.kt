@@ -29,7 +29,7 @@ fun MyFloatingActionButton(
     size: Dp = 55.dp,
     onState: (Boolean) -> Unit = {},
     state: Boolean = false,
-    colorBackground: Int = R.color.blue_main,
+    colorBackground: Color = Color.Blue,
     tint: Color = Color.White
 ) {
     FloatingActionButton(
@@ -44,7 +44,7 @@ fun MyFloatingActionButton(
         Icon(
             painter = painterResource(id = background),
             contentDescription = "backButtonFloat",
-            tint = colorResource(id = colorBackground)
+            tint = colorBackground
         )
 
         Icon(

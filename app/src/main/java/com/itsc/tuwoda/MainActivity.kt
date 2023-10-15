@@ -30,6 +30,8 @@ import android.Manifest
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsCompat
@@ -42,6 +44,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.test.ui.MapViewModel
+import com.itsc.tuwoda.ui.theme.Blue
 import com.itsc.tuwoda.ui.theme.VTBTheme
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.geometry.Point
@@ -143,58 +146,58 @@ class MainActivity : ComponentActivity() {
         )
         //endregion
         setContent {
-            VTBTheme {
-                val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
-                context = LocalContext.current
-                mapViewModel = viewModel<MapViewModel>(
-                    factory = object : ViewModelProvider.Factory {
-                        override fun<T: ViewModel> create(modelClass: Class<T>): T{
-                            return MapViewModel(
-                                mapView = MapView(context).apply{
-                                    this.map.move(
-                                        CameraPosition(
-                                            Point(
-                                                56.452387,
-                                                84.972267
-                                            ),
-                                            10.0f,
-                                            0.0f,
-                                            0.0f),
-                                        Animation(Animation.Type.SMOOTH, 0f),
-                                        null
-                                    )
-                                },
-                                context = context
-                            ) as T
-                        }
+            val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
+            context = LocalContext.current
+            mapViewModel = viewModel<MapViewModel>(
+                factory = object : ViewModelProvider.Factory {
+                    override fun<T: ViewModel> create(modelClass: Class<T>): T{
+                        return MapViewModel(
+                            mapView = MapView(context).apply{
+                                this.map.move(
+                                    CameraPosition(
+                                        Point(
+                                            56.452387,
+                                            84.972267
+                                        ),
+                                        10.0f,
+                                        0.0f,
+                                        0.0f),
+                                    Animation(Animation.Type.SMOOTH, 0f),
+                                    null
+                                )
+                            },
+                            context = context
+                        ) as T
                     }
-                )
-                val navController = rememberNavController()
-                
-                mapViewModel?.initBankPlacemarks(
-                    id = listOf(1,2,3,4,5),
-                    l = listOf(
-                        Pair(56.454424, 84.935289),
-                        Pair(56.537350, 84.953260),
-                        Pair(56.503949, 85.021851),
-                        Pair(56.474359, 85.002254),
-                        Pair(56.481329, 84.967838)
-                    ),
-                ){ id->
-                    currentBank = id
                 }
+            )
+            val navController = rememberNavController()
 
-                Scaffold(
-                    content = {paddingValues ->
-                        WindowInsetsControllerCompat(window, window.decorView).apply {
-                            hide(WindowInsetsCompat.Type.navigationBars())
-                            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                        }
-                        NavHost(
-                            navController = navController,
-                            startDestination = "main"
-                        ){
-                            composable("main") {
+            mapViewModel?.initBankPlacemarks(
+                id = listOf(1,2,3,4,5),
+                l = listOf(
+                    Pair(56.454424, 84.935289),
+                    Pair(56.537350, 84.953260),
+                    Pair(56.503949, 85.021851),
+                    Pair(56.474359, 85.002254),
+                    Pair(56.481329, 84.967838)
+                ),
+            ){ id->
+                currentBank = id
+            }
+
+            Scaffold(
+                content = {paddingValues ->
+                    WindowInsetsControllerCompat(window, window.decorView).apply {
+                        hide(WindowInsetsCompat.Type.navigationBars())
+                        systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                    }
+                    NavHost(
+                        navController = navController,
+                        startDestination = "main"
+                    ){
+                        composable("main") {
+                            VTBTheme {
                                 MyBottomSheetScaffold(
                                     paddingValues = paddingValues,
                                     scaffoldState = bottomSheetScaffoldState,
@@ -207,9 +210,10 @@ class MainActivity : ComponentActivity() {
                                             floatingActionButton = {
                                                 MyFloatingActionButton(
                                                     background = R.drawable.ellipsefull,
+                                                    colorBackground = Color(0xff4583ff),
                                                     icon = R.drawable.geo,
                                                     modifier = Modifier
-                                                        .offset(y = (-65).dp),
+                                                        .offset(y = (-125).dp),
                                                     onState = {
                                                         doItAndCheckPermissions {
                                                             mapViewModel?.goToMyLocation()
@@ -218,16 +222,19 @@ class MainActivity : ComponentActivity() {
                                                 )
                                             }
                                         ) {
-                                            Box(modifier = Modifier.padding(it)){
-                                                YandexMap()
+                                            Box(modifier = Modifier.padding(it)) {
                                             }
+                                            YandexMap()
                                         }
+
                                     },
                                     model = model,
                                     navController = navController
                                 )
                             }
-                            composable("more") {
+                        }
+                        composable("more") {
+                            VTBTheme {
                                 InfoScreen(
                                     model = model,
                                     office = model.curOffice,
@@ -236,11 +243,8 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-                )
-
-
-
-            }
+                }
+            )
         }
         registerPermissionListener()
     }
