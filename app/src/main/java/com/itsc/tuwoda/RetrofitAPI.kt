@@ -1,3 +1,4 @@
+/*
 package com.itsc.tuwoda.Model
 
 import android.telecom.Call
@@ -13,3 +14,4 @@ interface RetrofitAPI {
     @GET("atm")
     fun getATM(): Call<List<ATMModel>>
 }
+*/

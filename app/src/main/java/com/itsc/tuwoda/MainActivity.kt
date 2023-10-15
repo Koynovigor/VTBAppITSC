@@ -146,6 +146,7 @@ class MainActivity : ComponentActivity() {
         )
         //endregion
         setContent {
+            val taxi = packageManager.getLaunchIntentForPackage("ru.yandex.taxi")
             val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
             context = LocalContext.current
             mapViewModel = viewModel<MapViewModel>(
@@ -202,8 +203,8 @@ class MainActivity : ComponentActivity() {
                                     paddingValues = paddingValues,
                                     scaffoldState = bottomSheetScaffoldState,
                                     state = model.stateTextTitleSailing,
-                                    onState = { state ->
-                                        model.stateTextTitleSailing = state
+                                    taxi = {
+                                        startActivity(taxi)
                                     },
                                     content = {
                                         Scaffold(

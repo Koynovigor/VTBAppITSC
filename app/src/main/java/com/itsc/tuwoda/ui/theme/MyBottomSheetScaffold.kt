@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,6 +29,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
@@ -62,6 +64,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavHostController
 import com.itsc.tuwoda.MyViewModel
 import com.itsc.tuwoda.R
@@ -73,9 +76,8 @@ import com.itsc.tuwoda.allOffices
 fun MyBottomSheetScaffold(
     paddingValues: PaddingValues = PaddingValues(0.dp),
     scaffoldState: BottomSheetScaffoldState,
-    onState: (String) -> Unit,
+    taxi: () -> Unit,
     state: String,
-
     content: @Composable (PaddingValues) -> Unit,
     model: MyViewModel,
     navController: NavHostController
@@ -347,20 +349,32 @@ fun MyBottomSheetScaffold(
                                         contentDescription = "icoffices",
                                         modifier = Modifier
                                             .weight(2f)
-                                            .padding(end = 10.dp)
+                                            .padding(end = 5.dp)
                                             .clip(RoundedCornerShape(45.dp))
                                     )
                                     Text(
                                         text = item.address,
                                         modifier = Modifier
-                                            .weight(9f)
+                                            .weight(8f)
+                                            .padding(horizontal = 5.dp)
                                     )
                                     Text(
                                         text = "${item.distance} м",
                                         modifier = Modifier
                                             .weight(3f)
-                                            .padding(start = 10.dp)
+                                            .padding(horizontal = 5.dp)
                                     )
+                                    IconButton(
+                                        onClick = taxi,
+                                        modifier = Modifier
+                                            .weight(2f)
+                                            .padding(start = 10.dp)
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.taxi),
+                                            contentDescription = "taxi"
+                                        )
+                                    }
 
                                 }
                             }

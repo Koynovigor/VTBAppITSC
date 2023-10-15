@@ -1,3 +1,4 @@
+/*
 package com.itsc.tuwoda.Model
 
 import android.util.Log
@@ -81,3 +82,4 @@ class RetrofitHandler {
 
     }
 }
+*/

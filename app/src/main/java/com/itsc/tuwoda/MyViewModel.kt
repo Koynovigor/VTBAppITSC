@@ -1,5 +1,6 @@
 package com.itsc.tuwoda
 
+import android.content.Intent
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -24,8 +25,6 @@ class MyViewModel:ViewModel() {
         address = "",
         distance = 0
     )
-
-
 
 
 
