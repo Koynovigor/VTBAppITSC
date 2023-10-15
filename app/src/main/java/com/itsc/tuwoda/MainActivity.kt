@@ -27,6 +27,8 @@ import com.yandex.mapkit.location.LocationListener
 import com.yandex.mapkit.location.LocationManager
 import com.yandex.mapkit.location.LocationStatus
 import android.Manifest
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
@@ -35,6 +37,10 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.test.ui.MapViewModel
 import com.itsc.tuwoda.ui.theme.VTBTheme
 import com.yandex.mapkit.Animation
@@ -163,7 +169,8 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 )
-
+                val navController = rememberNavController()
+                
                 mapViewModel?.initBankPlacemarks(
                     id = listOf(1,2,3,4,5),
                     l = listOf(
@@ -178,42 +185,66 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Scaffold(
-                    content = {
+                    content = {paddingValues ->
                         WindowInsetsControllerCompat(window, window.decorView).apply {
                             hide(WindowInsetsCompat.Type.navigationBars())
                             systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                         }
-                        MyBottomSheetScaffold(
-                            paddingValues = it,
-                            scaffoldState = bottomSheetScaffoldState,
-                            state = model.stateTextTitleSailing,
-                            onState = { state ->
-                                model.stateTextTitleSailing = state
-                            },
-                            content = {
-                                YandexMap()
-                            },
-                            floatingActionButton = {
-                                MyFloatingActionButton(
-                                    background = R.drawable.ellipsefull,
-                                    icon = R.drawable.geo,
-                                    modifier = Modifier
-                                        .offset(y = (-35).dp),
-                                    onState = {
-                                        doItAndCheckPermissions {
-                                            mapViewModel?.goToMyLocation()
+                        NavHost(
+                            navController = navController,
+                            startDestination = "main"
+                        ){
+                            composable("main") {
+                                MyBottomSheetScaffold(
+                                    paddingValues = paddingValues,
+                                    scaffoldState = bottomSheetScaffoldState,
+                                    state = model.stateTextTitleSailing,
+                                    onState = { state ->
+                                        model.stateTextTitleSailing = state
+                                    },
+                                    content = {
+                                        Scaffold(
+                                            floatingActionButton = {
+                                                MyFloatingActionButton(
+                                                    background = R.drawable.ellipsefull,
+                                                    icon = R.drawable.geo,
+                                                    modifier = Modifier
+                                                        .offset(y = (-65).dp),
+                                                    onState = {
+                                                        doItAndCheckPermissions {
+                                                            mapViewModel?.goToMyLocation()
+                                                        }
+                                                    }
+                                                )
+                                            }
+                                        ) {
+                                            Box(modifier = Modifier.padding(it)){
+                                                YandexMap()
+                                            }
                                         }
-                                    }
+                                    },
+                                    model = model,
+                                    navController = navController
                                 )
-                            },
-                            model = model
-                        )
+                            }
+                            composable("more") {
+                                InfoScreen(
+                                    model = model,
+                                    office = model.curOffice,
+                                    navController = navController
+                                )
+                            }
+                        }
                     }
                 )
+
+
+
             }
         }
         registerPermissionListener()
     }
+
     override fun onStop() {
         mapViewModel?.mapView?.onStop()
         MapKitFactory.getInstance().onStop()

@@ -1,5 +1,6 @@
 package com.itsc.tuwoda
 
+import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,21 +9,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
 class MyViewModel:ViewModel() {
-    var stateMap by mutableStateOf(true)
-    var stateRoutes by mutableStateOf(false)
-    var stateMe by mutableStateOf(false)
-    var stateSailing by mutableStateOf(false)
-
-    var stateRouting by mutableStateOf(false)
-    var stateMapDialog by mutableStateOf(false)
-
-    var stateTextName by mutableStateOf("")
-    var stateTextTitle by mutableStateOf("")
-    var stateTextTitleSailing by mutableStateOf("")
-    var stateTextTitleRoutes by mutableStateOf("56.616055, 84.767233")
-    var stateTextTitleRoutes1 by mutableStateOf("56.582062, 84.902435")
-
-    var stateTextTitleMe by mutableStateOf("")
 
     val stateButton = listOf<MutableState<Boolean>>(
         mutableStateOf(false),
@@ -31,7 +17,29 @@ class MyViewModel:ViewModel() {
         mutableStateOf(false),
         mutableStateOf(false),
     )
+    var stateAtmOrOffice by mutableStateOf(false)
+    var stateSerch by mutableStateOf(false)
 
+    var curOffice: Office = Office(
+        address = "",
+        distance = 0
+    )
+
+
+
+
+
+
+
+
+
+
+    var stateMap by mutableStateOf(true)
+    var stateRoutes by mutableStateOf(false)
+    var stateMe by mutableStateOf(false)
+    var stateSailing by mutableStateOf(false)
+    var stateMapDialog by mutableStateOf(false)
+    var stateTextTitleSailing by mutableStateOf("")
 
     fun updateStateMap() {
         stateMap = true

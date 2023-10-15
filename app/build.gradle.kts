@@ -65,6 +65,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.compose.material:material:1.6.0-alpha07")
     implementation("junit:junit:4.13.2")
+    implementation("androidx.navigation:navigation-compose:2.7.4")
 
     implementation("com.yandex.android:maps.mobile:4.1.0-full")
 
