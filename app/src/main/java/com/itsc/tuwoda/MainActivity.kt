@@ -227,7 +227,6 @@ class MainActivity : ComponentActivity() {
                                             }
                                             YandexMap()
                                         }
-
                                     },
                                     model = model,
                                     navController = navController
